@@ -1,0 +1,36 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "CodeComb.Data.Excel Class Library",
+  "authors": [ "Yuuko" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "frameworks": {
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Data": "",
+        "System.Xml": "",
+        "System.Xml.Linq": ""
+      }
+    },
+    "dotnet5.4": {
+      "dependencies": {
+        "Microsoft.CSharp": "4.0.1-beta-23516",
+        "System.Collections": "4.0.11-beta-23516",
+        "System.Linq": "4.0.1-beta-23516",
+        "System.Runtime": "4.0.21-beta-23516",
+        "System.Threading": "4.0.11-beta-23516",
+        "System.Data.Common": "4.0.1-beta-23516",
+        "System.IO.Compression.ZipFile": "4.0.1-beta-23516",
+        "System.Xml.XPath.XDocument": "4.0.1-beta-23516",
+        "System.Xml.XmlDocument": "4.0.1-beta-23516",
+        "System.Xml.XDocument": "4.0.11-beta-23516",
+        "System.Xml.ReaderWriter": "4.0.11-beta-23516",
+        "System.Xml.XPath.XmlDocument": "4.0.1-beta-23516",
+        "System.Xml.XPath": "4.0.1-beta-23516",
+        "System.Xml.XmlSerializer": "4.0.11-beta-23516"
+      }
+    }
+  }
+}

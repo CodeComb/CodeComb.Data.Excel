@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0DED71BD-8EF0-43C8-ABB1-E70FB8B0EB37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{18C1098D-B35E-44D1-BFA2-3613B34E8101}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeComb.Data.Excel", "src\CodeComb.Data.Excel\CodeComb.Data.Excel.xproj", "{3060909E-8F54-4435-AC19-713DA665351D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3060909E-8F54-4435-AC19-713DA665351D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3060909E-8F54-4435-AC19-713DA665351D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3060909E-8F54-4435-AC19-713DA665351D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3060909E-8F54-4435-AC19-713DA665351D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3060909E-8F54-4435-AC19-713DA665351D} = {0DED71BD-8EF0-43C8-ABB1-E70FB8B0EB37}
+	EndGlobalSection
+EndGlobal
