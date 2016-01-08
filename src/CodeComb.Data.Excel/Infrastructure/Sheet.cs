@@ -5,7 +5,12 @@ using System.Threading.Tasks;
 
 namespace CodeComb.Data.Excel.Infrastructure
 {
-    public class Sheet : List<Row>
+    public class Sheet : List<Row>, IDisposable
     {
+        public void Dispose()
+        {
+            this.Clear();
+            GC.Collect();
+        }
     }
 }

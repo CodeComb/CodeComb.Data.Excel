@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.IO;
-using CodeComb.Data.Excel.Infrastructure;
 
 namespace CodeComb.Data.Excel.Sample
 {
@@ -11,17 +10,15 @@ namespace CodeComb.Data.Excel.Sample
     {
         public static void Main(string[] args)
         {
-            var txt = File.ReadAllText(@"c:\excel\sharedStrings.xml");
-            var sheettxt = File.ReadAllText(@"c:\excel\worksheets\sheet1.xml");
-            var ss = new SharedStrings(txt);
-            var sheet = new SheetWithoutHDR(sheettxt, ss);
-            foreach(var x in sheet)
+            using (var x = new ExcelStream(@"c:\excel\1.xlsx"))
+            using (var sheet = x.LoadSheet("Sheet1")) // 或 var sheet = x.LoadSheet(1)
             {
-                foreach(var y in x)
+                foreach (var a in sheet)
                 {
-                    Console.Write(y + "\t");
+                    foreach (var b in a)
+                        Console.Write(b + '\t');
+                    Console.Write("\r\n");
                 }
-                Console.Write("\r\n");
             }
             Console.ReadKey();
         }

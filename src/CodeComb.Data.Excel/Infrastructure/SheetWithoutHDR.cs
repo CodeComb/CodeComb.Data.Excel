@@ -17,6 +17,7 @@ namespace CodeComb.Data.Excel.Infrastructure
             xd.LoadXml(XmlSource);
             var rows = xd.GetElementsByTagName("row");
             // 遍历row标签
+            var counter = 0;
             foreach (XmlNode x in rows)
             {
                 var cols = x.ChildNodes;
@@ -26,18 +27,16 @@ namespace CodeComb.Data.Excel.Infrastructure
                 {
                     string value = null;
                     // 如果是字符串类型，则需要从字典中查询
-                    foreach (XmlAttribute z in y.Attributes)
+                    if (y.Attributes["t"]?.Value == "s")
                     {
-                        if (z.Name == "t" && z.Value == "s")
-                        {
-                            var index = Convert.ToUInt64(y.FirstChild.InnerText);
-                            value = StringDictionary[index];
-                            break;
-                        }
+                        var index = Convert.ToUInt64(y.FirstChild.InnerText);
+                        value = StringDictionary[index];
                     }
                     // 否则其中的v标签值即为单元格内容
-                    if (string.IsNullOrEmpty(value))
-                        value = y.FirstChild.InnerText;
+                    else
+                    {
+                        value = y.InnerText;
+                    }
 
                     objs.Add(value);
                 }
@@ -46,8 +45,8 @@ namespace CodeComb.Data.Excel.Infrastructure
                 while (objs.LastOrDefault() == null)
                     objs.RemoveAt(objs.Count - 1);
                 this.Add(objs);
-                GC.Collect();
             }
+            GC.Collect();
         }
     }
 }

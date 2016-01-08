@@ -10,6 +10,7 @@
     "net451": {
       "frameworkAssemblies": {
         "System.Data": "",
+        "System.IO.Compression": "",
         "System.Xml": "",
         "System.Xml.Linq": ""
       }
@@ -23,6 +24,7 @@
         "System.Threading": "4.0.11-beta-23516",
         "System.Data.Common": "4.0.1-beta-23516",
         "System.IO.Compression.ZipFile": "4.0.1-beta-23516",
+        "System.IO.FileSystem": "4.0.1-beta-23516",
         "System.Xml.XPath.XDocument": "4.0.1-beta-23516",
         "System.Xml.XmlDocument": "4.0.1-beta-23516",
         "System.Xml.XDocument": "4.0.11-beta-23516",

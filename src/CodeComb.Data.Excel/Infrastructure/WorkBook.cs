@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace CodeComb.Data.Excel.Infrastructure
 {
     public class WorkBook
     {
-        public WorkBook(string XmlSource)
+        public ulong Id { get; set; }
+        public string Name { get; set; }
+        public string FileName
         {
-            var xd = new XmlDocument();
-            xd.LoadXml(XmlSource);
-            var tmp = xd.GetElementsByTagName("sheet");
-            foreach(XmlNode x in tmp)
+            get
             {
-
+                return $"sheet{Id}.xml";
             }
         }
     }
