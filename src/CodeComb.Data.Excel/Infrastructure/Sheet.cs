@@ -7,6 +7,8 @@ namespace CodeComb.Data.Excel.Infrastructure
 {
     public class Sheet : List<Row>, IDisposable
     {
+        protected SharedStrings StringDictionary { get; set; }
+
         public void Dispose()
         {
             this.Clear();
@@ -26,6 +28,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                 col = new RowNumber("A");
                 foreach (var y in x)
                 {
+                    var innerText = ""; 
                     try
                     {
                         // 如果是数值类型，则直接写入xml
@@ -41,8 +44,13 @@ namespace CodeComb.Data.Excel.Infrastructure
                     catch
                     {
                         // 否则需要将字符串添加到sharedStrings.xml中，并生成索引
+                        if (!StringDictionary.Contains(y))
+                            StringDictionary.Add(y);
+                        innerText = StringDictionary.IndexOf(y).ToString();
                     }
+                    col++;
                 }
+                row++;
             }
         }
     }

@@ -13,8 +13,9 @@ namespace CodeComb.Data.Excel.Infrastructure
     {
         public Header Header { get; private set; }
 
-        public SheetHDR(string XmlSource, SharedStrings StringDictionary)
+        public SheetHDR(string XmlSource, SharedStrings stringDictionary)
         {
+            StringDictionary = stringDictionary;
             var xd = new XmlDocument();
             xd.LoadXml(XmlSource);
             var rows = xd.GetElementsByTagName("row");

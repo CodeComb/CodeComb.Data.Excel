@@ -81,6 +81,16 @@ namespace CodeComb.Data.Excel.Infrastructure
             return s;
         }
 
+        public override bool Equals(object obj)
+        {
+            return this == obj as RowNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return Convert.ToInt32(FromNumberSystem26(this.value));
+        }
+
         /// <summary>
         /// 将指定的26进制表示转换为自然数。映射关系：[A-Z] ->[1-26]。
         /// </summary>
@@ -97,6 +107,11 @@ namespace CodeComb.Data.Excel.Infrastructure
                 n += (c - 64ul) * j;
             }
             return n;
+        }
+
+        public override string ToString()
+        {
+            return value;
         }
     }
 }

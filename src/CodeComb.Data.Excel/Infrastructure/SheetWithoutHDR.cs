@@ -11,8 +11,9 @@ namespace CodeComb.Data.Excel.Infrastructure
 {
     public class SheetWithoutHDR : Sheet
     {
-        public SheetWithoutHDR(string XmlSource, SharedStrings StringDictionary)
+        public SheetWithoutHDR(string XmlSource, SharedStrings stringDictionary)
         {
+            StringDictionary = stringDictionary;
             var xd = new XmlDocument();
             xd.LoadXml(XmlSource);
             var rows = xd.GetElementsByTagName("row");
