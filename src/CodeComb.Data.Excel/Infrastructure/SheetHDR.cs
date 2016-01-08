@@ -11,6 +11,8 @@ namespace CodeComb.Data.Excel.Infrastructure
 {
     public class SheetHDR : Sheet
     {
+        public Header Header { get; private set; }
+
         public SheetHDR(string XmlSource, SharedStrings StringDictionary)
         {
             var xd = new XmlDocument();
@@ -18,11 +20,11 @@ namespace CodeComb.Data.Excel.Infrastructure
             var rows = xd.GetElementsByTagName("row");
             // 遍历row标签
             var flag = false;
-            Header header = new Header();
+            Header = new Header();
             foreach (XmlNode x in rows)
             {
                 var cols = x.ChildNodes;
-                var objs = new Row(header);
+                var objs = new Row(Header);
                 // 遍历c标签
                 foreach (XmlNode y in cols)
                 {
@@ -41,15 +43,15 @@ namespace CodeComb.Data.Excel.Infrastructure
 
                     if (!flag)
                     {
-                        header.Add(value);
+                        Header.Add(value);
                         continue;
                     }
                     objs.Add(value);
                 }
                 if (!flag)
                 {
-                    while (header.LastOrDefault() == null)
-                        header.RemoveAt(header.Count - 1);
+                    while (Header.LastOrDefault() == null)
+                        Header.RemoveAt(Header.Count - 1);
                     flag = true;
                     continue;
                 }

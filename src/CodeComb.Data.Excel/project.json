@@ -1,8 +1,9 @@
 ﻿{
+  "title": "CodeComb.Data.Excel",
   "version": "1.0.0-*",
-  "description": "CodeComb.Data.Excel Class Library",
-  "authors": [ "Yuuko" ],
-  "tags": [ "" ],
+  "description": "The excel provider for vNext",
+  "authors": [ "Amamiya Yuuko" ],
+  "tags": [ "Excel", "DNXCore", "vNext" ],
   "projectUrl": "",
   "licenseUrl": "",
 
