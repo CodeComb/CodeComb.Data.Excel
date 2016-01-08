@@ -49,7 +49,7 @@ namespace CodeComb.Data.Excel.Infrastructure
             var t = xd.GetElementsByTagName("t");
             ulong i = 0;
             foreach (XmlNode x in t)
-                dic.Add(i++, x.Value);
+                dic.Add(i++, x.InnerText);
             xmlSource = null;
             GC.Collect();
         }

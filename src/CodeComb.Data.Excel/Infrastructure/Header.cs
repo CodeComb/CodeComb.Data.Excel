@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CodeComb.Data.Excel.Infrastructure
 {
-    public class Sheet : List<Row>
+    public class Header : List<string>
     {
     }
 }

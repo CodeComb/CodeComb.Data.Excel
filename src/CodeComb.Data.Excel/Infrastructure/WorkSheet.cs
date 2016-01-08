@@ -5,7 +5,12 @@ using System.Threading.Tasks;
 
 namespace CodeComb.Data.Excel.Infrastructure
 {
-    public class Sheet : List<Row>
+    public class WorkSheet
     {
+        private WorkBook wb;
+
+        public string Title { get; set; }
+
+        public Sheet Sheet { get; private set; }
     }
 }
