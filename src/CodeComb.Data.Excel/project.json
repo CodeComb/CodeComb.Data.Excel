@@ -1,10 +1,12 @@
 ﻿{
   "title": "CodeComb.Data.Excel",
-  "version": "1.0.0-*",
+  "version": "2.0.0-*",
   "description": "The excel provider for vNext",
-  "authors": [ "Amamiya Yuuko" ],
-  "tags": [ "Excel", "DNXCore", "vNext" ],
-  "projectUrl": "",
+  "copyright": "Harbin Code Comb Technology Co.,Ltd",
+  "authors": [ "AmamiyaYuuko" ],
+  "tags": [ "vNext", "ASP.Net", "MVC", "Excel", "DNXCore" ],
+  "iconUrl": "http://www.1234.sh/images/logo.png",
+  "projectUrl": "https://github.com/CodeComb/Excel",
   "licenseUrl": "",
 
   "frameworks": {
