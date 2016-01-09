@@ -44,7 +44,8 @@ namespace CodeComb.Data.Excel.Infrastructure
                 // 去掉末尾的null
                 while (objs.LastOrDefault() == null)
                     objs.RemoveAt(objs.Count - 1);
-                this.Add(objs);
+                if (objs.Count > 0)
+                    this.Add(objs);
             }
             GC.Collect();
         }
