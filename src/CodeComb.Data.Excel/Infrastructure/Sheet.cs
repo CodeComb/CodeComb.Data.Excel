@@ -55,7 +55,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                     col = new ColNumber("A");
 
                     // 添加row节点
-                    var element = xd.CreateElement("row");
+                    var element = xd.CreateElement("row", xd.DocumentElement.NamespaceURI);
                     element.SetAttribute("r", row.ToString());
                     element.SetAttribute("span", "1:1");
                     foreach (var y in x)
@@ -64,6 +64,8 @@ namespace CodeComb.Data.Excel.Infrastructure
                         var flag = false;
                         try
                         {
+                            if (y.Length > 11 && y[0] != '-' || y.Length > 12 && y[0] == '-')
+                                throw new Exception();
                             // 如果是数值类型，则直接写入xml
                             if (x.Contains("."))
                             {
@@ -86,18 +88,17 @@ namespace CodeComb.Data.Excel.Infrastructure
                                 .ToString();
                             flag = true;
                         }
-                        var element2 = xd.CreateElement("c");
+                        var element2 = xd.CreateElement("c", xd.DocumentElement.NamespaceURI);
                         element2.SetAttribute("r", col + row.ToString());
                         if (flag)
                             element2.SetAttribute("t", "s");
-                        element.AppendChild(element2);
-
-                        var element3 = xd.CreateElement("v");
+                        var element3 = xd.CreateElement("v", xd.DocumentElement.NamespaceURI);
                         element3.InnerText = innerText;
                         element2.AppendChild(element3);
-
+                        element.AppendChild(element2);
                         col++;
                     }
+                    sheetData.AppendChild(element);
                     row++;
                 }
                 // 保存sheetX.xml
