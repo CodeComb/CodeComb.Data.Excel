@@ -46,23 +46,18 @@ namespace CodeComb.Data.Excel.Infrastructure
                 var xd = new XmlDocument();
                 xd.LoadXml(sr.ReadToEnd());
                 var sheetData = xd.GetElementsByTagName("sheetData")
-                    .Cast<XmlElement>()
+                    .Cast<XmlNode>()
                     .First();
                 // 删除全部元素
-                xd.RemoveAll();
                 sheetData.RemoveAll();
                 foreach (var x in this)
                 {
+                    col = new ColNumber("A");
+
                     // 添加row节点
                     var element = xd.CreateElement("row");
-                    var attr = xd.CreateAttribute("r");
-                    attr.Value = row.ToString();
-                    element.Attributes.Append(attr);
-                    var attr2 = xd.CreateAttribute("r");
-                    attr2.Value = "1:1";
-                    element.Attributes.Append(attr2);
-                    sheetData.AppendChild(element);
-                    col = new ColNumber("A");
+                    element.SetAttribute("r", row.ToString());
+                    element.SetAttribute("span", "1:1");
                     foreach (var y in x)
                     {
                         var innerText = "";
@@ -92,15 +87,9 @@ namespace CodeComb.Data.Excel.Infrastructure
                             flag = true;
                         }
                         var element2 = xd.CreateElement("c");
-                        var attr2_1 = xd.CreateAttribute("r");
-                        attr.Value = col + row.ToString();
-                        element.Attributes.Append(attr2_1);
+                        element2.SetAttribute("r", col + row.ToString());
                         if (flag)
-                        {
-                            var attr2_2 = xd.CreateAttribute("t");
-                            attr.Value = "s";
-                            element.Attributes.Append(attr2_2);
-                        }
+                            element2.SetAttribute("t", "s");
                         element.AppendChild(element2);
 
                         var element3 = xd.CreateElement("v");
@@ -112,6 +101,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                     row++;
                 }
                 // 保存sheetX.xml
+                stream.Position = 0;
                 xd.Save(stream);
             }
             // 回收垃圾
