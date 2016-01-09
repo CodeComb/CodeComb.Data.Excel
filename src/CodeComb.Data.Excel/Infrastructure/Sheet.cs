@@ -103,6 +103,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                 }
                 // 保存sheetX.xml
                 stream.Position = 0;
+                stream.SetLength(0);
                 xd.Save(stream);
             }
             // 回收垃圾

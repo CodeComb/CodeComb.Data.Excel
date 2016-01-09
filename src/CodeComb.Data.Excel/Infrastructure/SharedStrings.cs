@@ -92,8 +92,15 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public void Add(string item)
         {
-            var last = dic.Max(x => x.Key);
-            dic.Add(last + 1, item);
+            if (dic.Count == 0)
+            {
+                dic.Add(0, item);
+            }
+            else
+            {
+                var last = dic.Max(x => x.Key);
+                dic.Add(last + 1, item);
+            }
         }
 
         public void Clear()
