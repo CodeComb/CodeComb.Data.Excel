@@ -9,6 +9,8 @@ namespace CodeComb.Data.Excel.Infrastructure
     {
         private Header header;
 
+        public string Spans { get; private set; }
+
         public void Add(string item, string pos)
         {
             var numStr = "";
