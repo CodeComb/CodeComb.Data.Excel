@@ -11,14 +11,13 @@ namespace CodeComb.Data.Excel.Infrastructure
 {
     public class SheetWithoutHDR : Sheet
     {
-        public SheetWithoutHDR(string XmlSource, SharedStrings stringDictionary)
+        public SheetWithoutHDR(ulong Id, string XmlSource, ExcelStream Excel, SharedStrings stringDictionary)
+            : base(Id, Excel, stringDictionary)
         {
-            StringDictionary = stringDictionary;
             var xd = new XmlDocument();
             xd.LoadXml(XmlSource);
             var rows = xd.GetElementsByTagName("row");
             // 遍历row标签
-            var counter = 0;
             foreach (XmlNode x in rows)
             {
                 var cols = x.ChildNodes;
@@ -39,7 +38,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                         value = y.InnerText;
                     }
 
-                    objs.Add(value);
+                    objs.Add(value, y.Attributes["r"].Value);
                 }
 
                 // 去掉末尾的null

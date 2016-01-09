@@ -13,9 +13,9 @@ namespace CodeComb.Data.Excel.Infrastructure
     {
         public Header Header { get; private set; }
 
-        public SheetHDR(string XmlSource, SharedStrings stringDictionary)
+        public SheetHDR(ulong Id, string XmlSource, ExcelStream Excel, SharedStrings stringDictionary)
+            :base(Id, Excel, stringDictionary)
         {
-            StringDictionary = stringDictionary;
             var xd = new XmlDocument();
             xd.LoadXml(XmlSource);
             var rows = xd.GetElementsByTagName("row");
@@ -44,10 +44,10 @@ namespace CodeComb.Data.Excel.Infrastructure
 
                     if (!flag)
                     {
-                        Header.Add(value);
+                        Header.Add(value, y.Attributes["r"].Value);
                         continue;
                     }
-                    objs.Add(value);
+                    objs.Add(value, y.Attributes["r"].Value);
                 }
                 if (!flag)
                 {

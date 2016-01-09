@@ -5,65 +5,65 @@ using System.Threading.Tasks;
 
 namespace CodeComb.Data.Excel.Infrastructure
 {
-    public class RowNumber 
+    public class ColNumber 
     {
-        public RowNumber(string number = null)
+        public ColNumber(string number = null)
         {
             value = number;
         }
 
         private string value = null;
 
-        public static bool operator >(RowNumber a, RowNumber b)
+        public static bool operator >(ColNumber a, ColNumber b)
         {
             return string.Compare(a.value, b.value) > 0; 
         }
 
-        public static bool operator <(RowNumber a, RowNumber b)
+        public static bool operator <(ColNumber a, ColNumber b)
         {
             return string.Compare(a.value, b.value) < 0;
         }
 
-        public static bool operator >=(RowNumber a, RowNumber b)
+        public static bool operator >=(ColNumber a, ColNumber b)
         {
             return string.Compare(a.value, b.value) >= 0;
         }
 
-        public static bool operator <=(RowNumber a, RowNumber b)
+        public static bool operator <=(ColNumber a, ColNumber b)
         {
             return string.Compare(a.value, b.value) <= 0;
         }
 
-        public static bool operator !=(RowNumber a, RowNumber b)
+        public static bool operator !=(ColNumber a, ColNumber b)
         {
             return a.value != b.value;
         }
 
-        public static bool operator ==(RowNumber a, RowNumber b)
+        public static bool operator ==(ColNumber a, ColNumber b)
         {
             return a.value == b.value;
         }
 
-        public static RowNumber operator ++(RowNumber a)
+        public static ColNumber operator ++(ColNumber a)
         {
             var tmp = FromNumberSystem26(a.value);
             tmp++;
-            return new RowNumber(ToNumberSystem26(tmp));
+            return new ColNumber(ToNumberSystem26(tmp));
         }
 
-        public static RowNumber operator --(RowNumber a)
+        public static ColNumber operator --(ColNumber a)
         {
             var tmp = FromNumberSystem26(a.value);
             tmp--;
-            return new RowNumber(ToNumberSystem26(tmp));
+            return new ColNumber(ToNumberSystem26(tmp));
         }
 
-        public static implicit operator RowNumber(string s)
+        public static implicit operator ColNumber(string s)
         {
-            return new RowNumber(s);
+            return new ColNumber(s);
         }
 
-        public static implicit operator string(RowNumber rn)
+        public static implicit operator string(ColNumber rn)
         {
             return rn.value;
         }
@@ -83,30 +83,25 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public override bool Equals(object obj)
         {
-            return this == obj as RowNumber;
+            return this == obj as ColNumber;
         }
 
         public override int GetHashCode()
         {
             return Convert.ToInt32(FromNumberSystem26(this.value));
         }
-
-        /// <summary>
-        /// 将指定的26进制表示转换为自然数。映射关系：[A-Z] ->[1-26]。
-        /// </summary>
-        /// <param name="s">26进制表示（如果无效，则返回0）。</param>
-        /// <returns>自然数。</returns>
+        
         public static ulong FromNumberSystem26(string s)
         {
             if (string.IsNullOrEmpty(s)) return 0;
-            ulong n = 0;
-            for (ulong i = (ulong)s.Length - 1, j = 1ul; i >= 0; i--, j *= 26)
+            long n = 0;
+            for (long i = s.Length - 1, j = 1; i >= 0; i--, j *= 26)
             {
-                char c = Char.ToUpper(s[i]);
+                char c = Char.ToUpper(s[Convert.ToInt32(i)]);
                 if (c < 'A' || c > 'Z') return 0;
-                n += (c - 64ul) * j;
+                n += (c - 64) * j;
             }
-            return n;
+            return Convert.ToUInt64(n);
         }
 
         public override string ToString()

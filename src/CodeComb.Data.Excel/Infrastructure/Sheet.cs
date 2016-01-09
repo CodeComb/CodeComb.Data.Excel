@@ -1,12 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Xml;
 using System.Threading.Tasks;
+using CodeComb.Data.Excel;
 
 namespace CodeComb.Data.Excel.Infrastructure
 {
     public class Sheet : List<Row>, IDisposable
     {
+        public Sheet(ulong Id, ExcelStream Excel, SharedStrings StringDictionary)
+        {
+            this.Id = Id;
+            this.StringDictionary = StringDictionary;
+            this.excel = Excel;
+        }
+
+        private ExcelStream excel;
+
+        private ulong Id;
+
         protected SharedStrings StringDictionary { get; set; }
 
         public void Dispose()
@@ -22,36 +36,101 @@ namespace CodeComb.Data.Excel.Infrastructure
             if (this is SheetHDR)
                 tmp.Insert(0, (this as SheetHDR).Header.ToList());
             var row = 1ul;
-            RowNumber col;
-            foreach (var x in this)
+            ColNumber col;
+            // 获取sheetX.xml
+            var sheetX = excel.ZipArchive.GetEntry($"xl/worksheets/sheet{Id}.xml");
+            using (var stream = sheetX.Open())
+            using (var sr = new StreamReader(stream))
             {
-                col = new RowNumber("A");
-                foreach (var y in x)
+                // 获取sheetData节点
+                var xd = new XmlDocument();
+                xd.LoadXml(sr.ReadToEnd());
+                var sheetData = xd.GetElementsByTagName("sheetData")
+                    .Cast<XmlElement>()
+                    .First();
+                // 删除全部元素
+                xd.RemoveAll();
+                sheetData.RemoveAll();
+                foreach (var x in this)
                 {
-                    var innerText = ""; 
-                    try
+                    // 添加row节点
+                    var element = xd.CreateElement("row");
+                    var attr = xd.CreateAttribute("r");
+                    attr.Value = row.ToString();
+                    element.Attributes.Append(attr);
+                    var attr2 = xd.CreateAttribute("r");
+                    attr2.Value = "1:1";
+                    element.Attributes.Append(attr2);
+                    sheetData.AppendChild(element);
+                    col = new ColNumber("A");
+                    foreach (var y in x)
                     {
-                        // 如果是数值类型，则直接写入xml
-                        if (x.Contains("."))
+                        var innerText = "";
+                        var flag = false;
+                        try
                         {
-                            // 如果是小数尝试转换为double
+                            // 如果是数值类型，则直接写入xml
+                            if (x.Contains("."))
+                            {
+                                // 如果是小数尝试转换为double
+                                innerText = Convert.ToDouble(y).ToString();
+                            }
+                            else
+                            {
+                                // 如果是整数尝试转换为long
+                                innerText = Convert.ToInt64(y).ToString();
+                            }
                         }
-                        else
+                        catch
                         {
-                            // 如果是整数尝试转换为long
+                            // 否则需要将字符串添加到sharedStrings.xml中，并生成索引
+                            if (!StringDictionary.Contains(y))
+                                StringDictionary.Add(y);
+                            innerText = StringDictionary
+                                .IndexOf(y)
+                                .ToString();
+                            flag = true;
                         }
+                        var element2 = xd.CreateElement("c");
+                        var attr2_1 = xd.CreateAttribute("r");
+                        attr.Value = col + row.ToString();
+                        element.Attributes.Append(attr2_1);
+                        if (flag)
+                        {
+                            var attr2_2 = xd.CreateAttribute("t");
+                            attr.Value = "s";
+                            element.Attributes.Append(attr2_2);
+                        }
+                        element.AppendChild(element2);
+
+                        var element3 = xd.CreateElement("v");
+                        element3.InnerText = innerText;
+                        element2.AppendChild(element3);
+
+                        col++;
                     }
-                    catch
-                    {
-                        // 否则需要将字符串添加到sharedStrings.xml中，并生成索引
-                        if (!StringDictionary.Contains(y))
-                            StringDictionary.Add(y);
-                        innerText = StringDictionary.IndexOf(y).ToString();
-                    }
-                    col++;
+                    row++;
                 }
-                row++;
+                // 保存sheetX.xml
+                xd.Save(stream);
             }
+            // 回收垃圾
+            GC.Collect();
+
+            // 保存sharedStrings.xml
+            var sharedStrings = excel.ZipArchive.GetEntry($"xl/sharedStrings.xml");
+            using (var stream = sharedStrings.Open())
+            using (var sw = new StreamWriter(stream))
+            {
+                var xmlString = $@"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<sst count=""{StringDictionary.LongCount()}"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">";
+                foreach (var x in StringDictionary)
+                    xmlString += $"    <si><t>{x}</t></si>\r\n";
+                xmlString += "</sst>";
+                sw.Write(xmlString);
+            }
+            // 回收垃圾
+            GC.Collect();
         }
     }
 }

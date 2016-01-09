@@ -9,6 +9,19 @@ namespace CodeComb.Data.Excel.Infrastructure
     {
         private Header header;
 
+        public void Add(string item, string pos)
+        {
+            var numStr = "";
+            foreach (var x in pos)
+                if ("QWERTYUIOPASDFGHJKLZXCVBNM".Contains(x))
+                    numStr += x;
+            var num = new ColNumber(numStr);
+            var intvalue = Convert.ToInt64(ColNumber.FromNumberSystem26(num)) - 1;
+            while (this.LongCount() != intvalue +1)
+                this.Add(null);
+            this[(int)intvalue] = item;
+        }
+
         public Row(Header Header = null)
         {
             header = Header;

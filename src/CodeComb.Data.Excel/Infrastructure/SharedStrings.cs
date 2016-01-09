@@ -45,7 +45,7 @@ namespace CodeComb.Data.Excel.Infrastructure
         {
             xmlSource = XmlSource;
             var xd = new XmlDocument();
-            xd.LoadXml(xmlSource);
+            xd.LoadXml(xmlSource.Replace("standalone=\"true\"", "standalone=\"yes\""));
             var t = xd.GetElementsByTagName("t");
             ulong i = 0;
             foreach (XmlNode x in t)
@@ -62,7 +62,7 @@ namespace CodeComb.Data.Excel.Infrastructure
             }
             set
             {
-                throw new NotImplementedException();
+                dic[index] = value;
             }
         }
 
@@ -87,17 +87,18 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            dic.Remove(Convert.ToUInt64(index));
         }
 
         public void Add(string item)
         {
-            throw new NotImplementedException();
+            var last = dic.Max(x => x.Key);
+            dic.Add(last + 1, item);
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            dic.Clear();
         }
 
         public bool Contains(string item)
@@ -112,7 +113,14 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public bool Remove(string item)
         {
-            throw new NotImplementedException();
+            var keys = dic.Where(x => x.Value == item)
+                .Select(x => x.Key)
+                .ToList();
+            if (keys.Count == 0)
+                return false;
+            foreach (var x in keys)
+                dic.Remove(x);
+            return true;
         }
 
         public IEnumerator<string> GetEnumerator()
