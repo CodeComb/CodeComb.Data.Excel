@@ -57,7 +57,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                     // 添加row节点
                     var element = xd.CreateElement("row", xd.DocumentElement.NamespaceURI);
                     element.SetAttribute("r", row.ToString());
-                    element.SetAttribute("span", "1:1");
+                    element.SetAttribute("spans", "1:1");
                     foreach (var y in x)
                     {
                         var innerText = "";

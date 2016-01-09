@@ -92,14 +92,11 @@ namespace CodeComb.Data.Excel
 
         public SheetWithoutHDR LoadSheet(string name)
         {
-            var worksheet = WorkBook.Where(x => x.Name == name).First();
-            var e = ZipArchive.GetEntry($"xl/worksheets/{worksheet.FileName}");
-            using (var stream = e.Open())
-            {
-                var sr = new StreamReader(stream);
-                var result = sr.ReadToEnd();
-                return new SheetWithoutHDR(worksheet.Id, result, this ,cachedSharedStrings);
-            }
+            var Id = WorkBook
+                .Where(x => x.Name == name)
+                .Select(x => x.Id)
+                .First();
+            return LoadSheet(Id);
         }
 
         public SheetWithoutHDR LoadSheet(ulong Id)
@@ -116,14 +113,11 @@ namespace CodeComb.Data.Excel
 
         public SheetHDR LoadSheetHDR(string name)
         {
-            var worksheet = WorkBook.Where(x => x.Name == name).First();
-            var e = ZipArchive.GetEntry($"xl/worksheets/{worksheet.FileName}");
-            using (var stream = e.Open())
-            {
-                var sr = new StreamReader(stream);
-                var result = sr.ReadToEnd();
-                return new SheetHDR(worksheet.Id, result, this, cachedSharedStrings);
-            }
+            var Id = WorkBook
+                .Where(x => x.Name == name)
+                .Select(x => x.Id)
+                .First();
+            return LoadSheetHDR(Id);
         }
 
         public SheetHDR LoadSheetHDR(ulong Id)
@@ -148,6 +142,7 @@ namespace CodeComb.Data.Excel
 
         public void RemoveSheet(ulong Id)
         {
+            var name = WorkBook.Where(x => x.Id == Id).First().Name;
             // 从ExcelStream对象中删除
             WorkBook.Remove(WorkBook.Where(x => x.Id == Id).First());
 
@@ -190,6 +185,144 @@ namespace CodeComb.Data.Excel
                 stream.SetLength(0);
                 xd.Save(stream);
             }
+            
+            // 从app.xml中移除
+            var e4 = ZipArchive.GetEntry("docProps/app.xml");
+            using (var stream = e4.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var result = sr.ReadToEnd();
+                var xd = new XmlDocument();
+                xd.LoadXml(result);
+                var tmp = xd.GetElementsByTagName("vt:lpstr")
+                    .Cast<XmlNode>()
+                    .Where(x => x.InnerText == name)
+                    .Single();
+                tmp.ParentNode.Attributes["size"].Value = (Convert.ToInt32(tmp.ParentNode.Attributes["size"].Value) - 1).ToString();
+                tmp.ParentNode.RemoveChild(tmp);
+                var tmp2 = xd.GetElementsByTagName("vt:i4")
+                    .Cast<XmlNode>()
+                    .Single();
+                tmp2.InnerText = (Convert.ToInt32(tmp2.InnerText) - 1).ToString();
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
+        }
+
+        private ulong createSheet(string name)
+        {
+            var Id = WorkBook.Count > 0 ? WorkBook.Max(x => x.Id) + 1 : 1;
+            // 向缓存中添加该Id
+            WorkBook.Add(new WorkBook
+            {
+                Id = Id,
+                Name = name
+            });
+
+            // 添加sheetX.xml
+            var e = ZipArchive.CreateEntry($"xl/worksheets/sheet{Id}.xml", CompressionLevel.Optimal);
+            using (var stream = e.Open())
+            using (var sw = new StreamWriter(stream))
+            {
+                sw.Write(@"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<worksheet xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"" xmlns:r=""http://schemas.openxmlformats.org/officeDocument/2006/relationships"" xmlns:xdr=""http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing"" xmlns:x14=""http://schemas.microsoft.com/office/spreadsheetml/2009/9/main"" xmlns:mc=""http://schemas.openxmlformats.org/markup-compatibility/2006"">
+  <sheetPr />
+  <dimension ref=""A1"" />
+  <sheetViews>
+    <sheetView workbookViewId=""0"">
+      <selection activeCell=""A1"" sqref=""A1"" />
+    </sheetView>
+  </sheetViews>
+  <sheetFormatPr defaultColWidth=""9"" defaultRowHeight=""13.5"" />
+  <sheetData>
+  </sheetData>
+  <pageMargins left=""0.75"" right=""0.75"" top=""1"" bottom=""1"" header=""0.511805555555556"" footer=""0.511805555555556"" />
+  <headerFooter />
+</worksheet>");
+            }
+
+            // 向[Content_Types].xml中添加sheetX.xml
+            var e2 = ZipArchive.GetEntry("[Content_Types].xml");
+            using (var stream = e2.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var xd = new XmlDocument();
+                xd.LoadXml(sr.ReadToEnd());
+                var element = xd.CreateElement("Override", xd.DocumentElement.NamespaceURI);
+                element.SetAttribute("PartName", $"/xl/worksheets/sheet{Id}.xml");
+                element.SetAttribute("ContentType", "application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml");
+                var tmp = xd.GetElementsByTagName("Types")
+                                .Cast<XmlNode>()
+                                .First()
+                                .AppendChild(element);
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
+
+            // 向workbook.xml添加sheetX.xml
+            var e3 = ZipArchive.GetEntry("xl/workbook.xml");
+            using (var stream = e3.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var xd = new XmlDocument();
+                xd.LoadXml(sr.ReadToEnd());
+                var tmp = xd.GetElementsByTagName("sheets")
+                                .Cast<XmlNode>()
+                                .First();
+                var element = xd.CreateElement("sheet", xd.DocumentElement.NamespaceURI);
+                tmp.AppendChild(element);
+                var attr = xd.CreateAttribute("r", "id", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+                attr.Value = $"rId{Id}";
+                element.Attributes.Append(attr);
+                element.SetAttribute("sheetId", Id.ToString());
+                element.SetAttribute("name", name);
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
+
+            // 向app.xml中添加sheetX.xml
+            var e4 = ZipArchive.GetEntry("docProps/app.xml");
+            using (var stream = e4.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var result = sr.ReadToEnd();
+                var xd = new XmlDocument();
+                xd.LoadXml(result);
+                var element = xd.CreateElement("vt:lpstr", "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes");
+                element.InnerText = name;
+                var tmp = xd.GetElementsByTagName("vt:vector")
+                    .Cast<XmlNode>()
+                    .Where(x => x.Attributes["baseType"].Value == "lpstr")
+                    .Single();
+                tmp.AppendChild(element);
+
+                tmp.Attributes["size"].Value = (Convert.ToInt32(tmp.Attributes["size"].Value) + 1).ToString();
+
+                var tmp2 = xd.GetElementsByTagName("vt:i4")
+                    .Cast<XmlNode>()
+                    .Single();
+                tmp2.InnerText = (Convert.ToInt32(tmp2.InnerText) + 1).ToString();
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
+
+            return Id;
+        }
+
+        public SheetWithoutHDR CreateSheet(string name)
+        {
+            var id = createSheet(name);
+            return LoadSheet(id);
+        }
+
+        public SheetHDR CreateSheetHDR(string name)
+        {
+            var id = createSheet(name);
+            return LoadSheetHDR(id);
         }
 
         public void Dispose()
