@@ -35,8 +35,8 @@ namespace CodeComb.Data.Excel
                         // 同时需要向[Content_Types].xml添加sharedStrings.xml的信息
                         var e2 = ZipArchive.GetEntry("[Content_Types].xml");
                         using (var stream = e2.Open())
+                        using (var sr = new StreamReader(stream))
                         {
-                            var sr = new StreamReader(stream);
                             var result = sr.ReadToEnd();
                             var xd = new XmlDocument();
                             xd.LoadXml(result);
@@ -47,6 +47,27 @@ namespace CodeComb.Data.Excel
                                 .Cast<XmlNode>()
                                 .First()
                                 .AppendChild(element);
+                            stream.Position = 0;
+                            stream.SetLength(0);
+                            xd.Save(stream);
+                        }
+
+                        // 还需要向xl rels添加
+                        var e3 = ZipArchive.GetEntry("xl/_rels/workbook.xml.rels");
+                        using (var stream = e3.Open())
+                        using (var sr = new StreamReader(stream))
+                        {
+                            var result = sr.ReadToEnd();
+                            var xd = new XmlDocument();
+                            xd.LoadXml(result);
+                            var tmp = xd.GetElementsByTagName("Relationships")
+                                .Cast<XmlNode>()
+                                .First();
+                            var element = xd.CreateElement("Relationship", xd.DocumentElement.NamespaceURI);
+                            element.SetAttribute("Target", "sharedStrings.xml");
+                            element.SetAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings");
+                            element.SetAttribute("Id", $"rId{tmp.ChildNodes.Count + 1}");
+                            tmp.AppendChild(element);
                             stream.Position = 0;
                             stream.SetLength(0);
                             xd.Save(stream);
@@ -208,11 +229,33 @@ namespace CodeComb.Data.Excel
                 stream.SetLength(0);
                 xd.Save(stream);
             }
+
+            // 重新整理xl/rels
+            var e5 = ZipArchive.GetEntry("xl/_rels/workbook.xml.rels");
+            using (var stream = e5.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var result = sr.ReadToEnd();
+                var xd = new XmlDocument();
+                xd.LoadXml(result);
+                var relationships = xd.GetElementsByTagName("Relationships")
+                    .Cast<XmlNode>()
+                    .First();
+                var sheetX = relationships.ChildNodes
+                    .Cast<XmlNode>()
+                    .Where(x => x.Attributes["Target"].Value == $"worksheets/sheet{Id}.xml")
+                    .Single();
+                relationships.RemoveChild(sheetX);
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
         }
 
         private ulong createSheet(string name)
         {
             var Id = WorkBook.Count > 0 ? WorkBook.Max(x => x.Id) + 1 : 1;
+            string identifier;
             // 向缓存中添加该Id
             WorkBook.Add(new WorkBook
             {
@@ -274,7 +317,8 @@ namespace CodeComb.Data.Excel
                 var element = xd.CreateElement("sheet", xd.DocumentElement.NamespaceURI);
                 tmp.AppendChild(element);
                 var attr = xd.CreateAttribute("r", "id", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-                attr.Value = $"rId{Id}";
+                identifier = Guid.NewGuid().ToString().Substring(0, 8);
+                attr.Value = identifier;
                 element.Attributes.Append(attr);
                 element.SetAttribute("sheetId", Id.ToString());
                 element.SetAttribute("name", name);
@@ -310,6 +354,27 @@ namespace CodeComb.Data.Excel
                 xd.Save(stream);
             }
 
+            // 向xl/rels中添加
+            var e5 = ZipArchive.GetEntry("xl/_rels/workbook.xml.rels");
+            using (var stream = e5.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var result = sr.ReadToEnd();
+                var xd = new XmlDocument();
+                xd.LoadXml(result);
+                var relationships = xd.GetElementsByTagName("Relationships")
+                    .Cast<XmlNode>()
+                    .First();
+                var element = xd.CreateElement("Relationship", xd.DocumentElement.NamespaceURI);
+                element.SetAttribute("Target", $"worksheets/sheet{Id}.xml");
+                element.SetAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
+                element.SetAttribute("Id", identifier);
+                relationships.AppendChild(element);
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
+
             return Id;
         }
 
@@ -329,6 +394,12 @@ namespace CodeComb.Data.Excel
         {
             ZipArchive.Dispose();
             file.Dispose();
+        }
+
+        public static ExcelStream Create(string path)
+        {
+            File.WriteAllBytes(path, NewExcel.Bytes);
+            return new ExcelStream(path);
         }
     }
 }

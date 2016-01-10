@@ -7,6 +7,15 @@ namespace CodeComb.Data.Excel.Sample
     {
         public static void Main(string[] args)
         {
+            using (var x = ExcelStream.Create(@"c:\excel\try.xlsx"))
+            using (var sheet = x.LoadSheet(1))
+            {
+                sheet.Add(new Infrastructure.Row
+                {
+                    "Create test"
+                });
+                sheet.SaveChanges();
+            }
             using (var x = new ExcelStream(@"c:\excel\1.xlsx")) // Open excel file
             using (var sheet = x.LoadSheet("Sheet1")) // var sheet = x.LoadSheet(1)
             {
