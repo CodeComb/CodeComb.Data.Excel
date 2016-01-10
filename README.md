@@ -1,5 +1,8 @@
 # CodeComb.Data.Excel
-Excel (*.xlsx) provider for dnxcore
+
+Excel data provider for vNext (dnxcore).
+
+It is under developing now, we will open source after some tests and refactory.
 
 ## Samples
 
@@ -28,6 +31,15 @@ namespace CodeComb.Data.Excel.Sample
     }
 }
 
+```
+
+### Load an existed workbook
+
+```
+using (var x = new ExcelStream(@"c:\excel\somebook.xlsx"))
+{
+    ...
+}
 ```
 
 ### Read the sheet
@@ -113,15 +125,6 @@ using (var sheet = x.CreateSheet("Sheet2"))
 using (var x = new ExcelStream(@"c:\excel\1.xlsx"))
 {
     x.RemoveSheet("Sheet1"); // x.RemoveSheet(1);
-}
-```
-
-### Create a new workbook
-
-```c#
-using(var x = ExcelStream.Create(@"c:\excel\test.xlsx"))
-{
-    ...
 }
 ```
 
