@@ -1,0 +1,13 @@
+language: csharp
+sudo: true
+mono:
+  - beta
+env:
+  - MONO_THREADS_PER_CPU=2000 MONO_MANAGED_WATCHER=disabled
+os:
+  - linux
+  - osx
+before_script:
+  - chmod ugo+x build.sh
+script:
+  - ./build.sh --quiet verify
