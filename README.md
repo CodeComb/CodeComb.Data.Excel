@@ -5,7 +5,7 @@ Excel (*.xlsx) provider for dnxcore
 
 ### Create a new workbook
 
-```
+```c#
 using System;
 using CodeComb.Data.Excel;
 
@@ -32,7 +32,7 @@ namespace CodeComb.Data.Excel.Sample
 
 ### Read the sheet
 
-```
+```c#
 using System;
 using CodeComb.Data.Excel;
 
@@ -61,7 +61,7 @@ namespace CodeComb.Data.Excel.Sample
 
 ### Updates deletions and additions
 
-```
+```c#
 using System;
 using CodeComb.Data.Excel;
 
@@ -95,7 +95,7 @@ namespace CodeComb.Data.Excel.Sample
 
 ### Create a sheet
 
-```
+```c#
 using (var x = new ExcelStream(@"c:\excel\1.xlsx"))
 using (var sheet = x.CreateSheet("Sheet2"))
 {
@@ -109,7 +109,7 @@ using (var sheet = x.CreateSheet("Sheet2"))
 
 ### Remove a sheet
 
-```
+```c#
 using (var x = new ExcelStream(@"c:\excel\1.xlsx"))
 {
     x.RemoveSheet("Sheet1"); // x.RemoveSheet(1);
@@ -118,7 +118,7 @@ using (var x = new ExcelStream(@"c:\excel\1.xlsx"))
 
 ### Create a new workbook
 
-```
+```c#
 using(var x = ExcelStream.Create(@"c:\excel\test.xlsx"))
 {
     ...
@@ -127,7 +127,7 @@ using(var x = ExcelStream.Create(@"c:\excel\test.xlsx"))
 
 ### Row 1 as header
 
-```
+```c#
 using System;
 using System.Linq;
 using CodeComb.Data.Excel;
