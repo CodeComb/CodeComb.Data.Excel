@@ -6,7 +6,7 @@
   "authors": [ "AmamiyaYuuko" ],
   "tags": [ "vNext", "ASP.Net", "MVC", "Excel", "DNXCore" ],
   "iconUrl": "http://www.1234.sh/images/logo.png",
-  "projectUrl": "https://github.com/CodeComb/Excel",
+  "projectUrl": "https://github.com/CodeComb/CodeComb.Data.Excel",
   "licenseUrl": "",
 
   "frameworks": {
