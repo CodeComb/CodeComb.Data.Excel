@@ -11,7 +11,7 @@
   },
 
   "dependencies": {
-    "CodeComb.Data.Excel": "1.0.0-*"
+    "CodeComb.Data.Excel": ""
   },
 
   "commands": {
