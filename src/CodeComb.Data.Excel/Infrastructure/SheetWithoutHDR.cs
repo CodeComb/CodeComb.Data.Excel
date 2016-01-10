@@ -47,6 +47,8 @@ namespace CodeComb.Data.Excel.Infrastructure
                 if (objs.Count > 0)
                     this.Add(objs);
             }
+            while (this.Count > 0 && this.Last().Count == 0)
+                this.RemoveAt(this.Count - 1);
             GC.Collect();
         }
     }
