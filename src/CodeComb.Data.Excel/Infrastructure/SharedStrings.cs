@@ -13,6 +13,13 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         private Dictionary<ulong, string> dic = new Dictionary<ulong, string>();
 
+        public bool Exist(string str)
+        {
+            if (dic.ContainsValue(str))
+                return true;
+            return false;
+        }
+
         public int Count
         {
             get

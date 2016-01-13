@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Xml;
+using System.Text;
 using System.Threading.Tasks;
 using CodeComb.Data.Excel;
 
@@ -81,7 +82,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                         catch
                         {
                             // 否则需要将字符串添加到sharedStrings.xml中，并生成索引
-                            if (!StringDictionary.Contains(y))
+                            if (!StringDictionary.Exist(y))
                                 StringDictionary.Add(y);
                             innerText = StringDictionary
                                 .IndexOf(y)
@@ -114,11 +115,12 @@ namespace CodeComb.Data.Excel.Infrastructure
             using (var stream = sharedStrings.Open())
             using (var sw = new StreamWriter(stream))
             {
-                var xmlString = $@"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
-<sst count=""{StringDictionary.LongCount()}"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">";
+                var xmlString = new StringBuilder($@"<?xml version=""1.0"" encoding=""UTF-8"" standalone=""yes""?>
+<sst count=""{StringDictionary.LongCount()}"" xmlns=""http://schemas.openxmlformats.org/spreadsheetml/2006/main"">");
+                var inner = new StringBuilder();
                 foreach (var x in StringDictionary)
-                    xmlString += $"    <si><t>{x}</t></si>\r\n";
-                xmlString += "</sst>";
+                    xmlString.Append($"    <si><t>{x}</t></si>\r\n");
+                xmlString.Append("</sst>");
                 sw.Write(xmlString);
             }
             // 回收垃圾
