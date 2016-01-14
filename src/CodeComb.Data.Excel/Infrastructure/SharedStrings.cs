@@ -12,10 +12,11 @@ namespace CodeComb.Data.Excel.Infrastructure
         private string xmlSource;
 
         private Dictionary<ulong, string> dic = new Dictionary<ulong, string>();
+        private Dictionary<string, ulong> dic2 = new Dictionary<string, ulong>();
 
         public bool Exist(string str)
         {
-            if (dic.ContainsValue(str))
+            if (dic2.ContainsKey(str))
                 return true;
             return false;
         }
@@ -56,7 +57,11 @@ namespace CodeComb.Data.Excel.Infrastructure
             var t = xd.GetElementsByTagName("t");
             ulong i = 0;
             foreach (XmlNode x in t)
-                dic.Add(i++, x.InnerText);
+            {
+                var index = i++;
+                dic.Add(index, x.InnerText);
+                dic2.Add(x.InnerText, index);
+            }
             xmlSource = null;
             GC.Collect();
         }
@@ -79,12 +84,14 @@ namespace CodeComb.Data.Excel.Infrastructure
             GC.Collect();
         }
 
+        public ulong _IndexOf(string item)
+        {
+            return dic2[item];
+        }
+
         public int IndexOf(string item)
         {
-            var index = dic.Where(x => x.Value == item)
-                .Select(x => x.Key)
-                .FirstOrDefault();
-            return Convert.ToInt32(index);
+            return (int)dic2[item];
         }
 
         public void Insert(int index, string item)
@@ -94,30 +101,52 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public void RemoveAt(int index)
         {
+            var str = dic[Convert.ToUInt64(index)];
             dic.Remove(Convert.ToUInt64(index));
+            dic2.Remove(str);
+        }
+
+        public ulong _Add(string item)
+        {
+            if (dic.Count == 0)
+            {
+                dic.Add(1, item);
+                dic2.Add(item, 1);
+                return 1;
+            }
+            else
+            {
+                var last = dic.Last().Key;
+                dic.Add(last + 1, item);
+                dic2.Add(item, last + 1);
+                return last + 1;
+            }
         }
 
         public void Add(string item)
         {
             if (dic.Count == 0)
             {
-                dic.Add(0, item);
+                dic.Add(1, item);
+                dic2.Add(item, 1);
             }
             else
             {
                 var last = dic.Max(x => x.Key);
                 dic.Add(last + 1, item);
+                dic2.Add(item, last + 1);
             }
         }
 
         public void Clear()
         {
             dic.Clear();
+            dic2.Clear();
         }
 
         public bool Contains(string item)
         {
-            return dic.Any(x => x.Value == item);
+            return dic2.ContainsKey(item);
         }
 
         public void CopyTo(string[] array, int arrayIndex)

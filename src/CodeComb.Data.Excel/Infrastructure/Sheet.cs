@@ -76,17 +76,14 @@ namespace CodeComb.Data.Excel.Infrastructure
                             else
                             {
                                 // 如果是整数尝试转换为long
-                                innerText = Convert.ToInt64(y).ToString();
+                                innerText = Convert.ToInt64(y).ToString(); 
                             }
                         }
                         catch
                         {
                             // 否则需要将字符串添加到sharedStrings.xml中，并生成索引
                             if (!StringDictionary.Exist(y))
-                                StringDictionary.Add(y);
-                            innerText = StringDictionary
-                                .IndexOf(y)
-                                .ToString();
+                                innerText = StringDictionary._Add(y).ToString();
                             flag = true;
                         }
                         var element2 = xd.CreateElement("c", xd.DocumentElement.NamespaceURI);

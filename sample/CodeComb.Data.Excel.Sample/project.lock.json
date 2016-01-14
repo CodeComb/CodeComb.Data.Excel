@@ -3883,7 +3883,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "CodeComb.Data.Excel >= 1.0.0-*"
+      "CodeComb.Data.Excel "
     ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": [

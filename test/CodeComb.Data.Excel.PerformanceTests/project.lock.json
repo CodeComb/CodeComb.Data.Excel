@@ -2135,7 +2135,7 @@
   "libraries": {
     "CodeComb.Data.Excel/2.0.0": {
       "type": "project",
-      "path": "../src/CodeComb.Data.Excel/project.json"
+      "path": "../../src/CodeComb.Data.Excel/project.json"
     },
     "Microsoft.CSharp/4.0.1-beta-23516": {
       "type": "package",

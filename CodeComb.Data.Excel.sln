@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeComb.Data.Excel", "src\CodeComb.Data.Excel\CodeComb.Data.Excel.xproj", "{3060909E-8F54-4435-AC19-713DA665351D}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeComb.Data.Excel", "src\CodeComb.Data.Excel\CodeComb.Data.Excel.xproj", "{865000E9-FE4C-4FFD-A5D3-DDE6F5DAD2EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{9C24A871-7E3F-464A-B819-EAA12703A49F}"
 EndProject
@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{64B3944D-B
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeComb.Data.Excel.Sample", "Y:\项目\CodeComb.Data.Excel\sample\CodeComb.Data.Excel.Sample\CodeComb.Data.Excel.Sample.xproj", "{FA321579-2910-44D5-BB40-B067C453033B}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeComb.Data.Excel.PerformanceTests", "CodeComb.Data.Excel.PerformanceTests\CodeComb.Data.Excel.PerformanceTests.xproj", "{084A49EA-1357-40B3-85ED-5854CB243556}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CodeComb.Data.Excel.PerformanceTests", "Y:\项目\CodeComb.Data.Excel\test\CodeComb.Data.Excel.PerformanceTests\CodeComb.Data.Excel.PerformanceTests.xproj", "{A6A0687A-D936-402C-BFD0-FAC12BD5E6FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,25 +26,25 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3060909E-8F54-4435-AC19-713DA665351D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3060909E-8F54-4435-AC19-713DA665351D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3060909E-8F54-4435-AC19-713DA665351D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3060909E-8F54-4435-AC19-713DA665351D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{865000E9-FE4C-4FFD-A5D3-DDE6F5DAD2EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{865000E9-FE4C-4FFD-A5D3-DDE6F5DAD2EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{865000E9-FE4C-4FFD-A5D3-DDE6F5DAD2EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{865000E9-FE4C-4FFD-A5D3-DDE6F5DAD2EE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FA321579-2910-44D5-BB40-B067C453033B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FA321579-2910-44D5-BB40-B067C453033B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA321579-2910-44D5-BB40-B067C453033B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA321579-2910-44D5-BB40-B067C453033B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{084A49EA-1357-40B3-85ED-5854CB243556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{084A49EA-1357-40B3-85ED-5854CB243556}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{084A49EA-1357-40B3-85ED-5854CB243556}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{084A49EA-1357-40B3-85ED-5854CB243556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6A0687A-D936-402C-BFD0-FAC12BD5E6FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6A0687A-D936-402C-BFD0-FAC12BD5E6FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6A0687A-D936-402C-BFD0-FAC12BD5E6FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6A0687A-D936-402C-BFD0-FAC12BD5E6FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3060909E-8F54-4435-AC19-713DA665351D} = {0DED71BD-8EF0-43C8-ABB1-E70FB8B0EB37}
+		{865000E9-FE4C-4FFD-A5D3-DDE6F5DAD2EE} = {0DED71BD-8EF0-43C8-ABB1-E70FB8B0EB37}
 		{FA321579-2910-44D5-BB40-B067C453033B} = {9C24A871-7E3F-464A-B819-EAA12703A49F}
-		{084A49EA-1357-40B3-85ED-5854CB243556} = {64B3944D-B34F-4BE1-A4DA-0959BB784174}
+		{A6A0687A-D936-402C-BFD0-FAC12BD5E6FC} = {64B3944D-B34F-4BE1-A4DA-0959BB784174}
 	EndGlobalSection
 EndGlobal
