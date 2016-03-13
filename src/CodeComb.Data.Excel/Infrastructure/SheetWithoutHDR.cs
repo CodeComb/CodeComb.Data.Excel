@@ -32,6 +32,10 @@ namespace CodeComb.Data.Excel.Infrastructure
                         var index = Convert.ToUInt64(y.FirstChild.InnerText);
                         value = StringDictionary[index];
                     }
+                    else if (y.Attributes["t"].Value == "inlineStr")
+                    {
+                        value = y.FirstChild.FirstChild.InnerText;
+                    }
                     // 否则其中的v标签值即为单元格内容
                     else
                     {
