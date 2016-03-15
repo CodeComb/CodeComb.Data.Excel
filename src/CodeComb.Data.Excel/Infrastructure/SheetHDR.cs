@@ -31,12 +31,12 @@ namespace CodeComb.Data.Excel.Infrastructure
                 {
                     string value = null;
                     // 如果是字符串类型，则需要从字典中查询
-                    if (y.Attributes["t"].Value == "s")
+                    if (y.Attributes["t"]?.Value == "s")
                     {
                         var index = Convert.ToUInt64(y.FirstChild.InnerText);
                         value = StringDictionary[index];
                     }
-                    else if (y.Attributes["t"].Value == "inlineStr")
+                    else if (y.Attributes["t"]?.Value == "inlineStr")
                     {
                         value = y.FirstChild.FirstChild.InnerText;
                     }

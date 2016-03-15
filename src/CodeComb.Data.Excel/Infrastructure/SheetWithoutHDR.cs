@@ -32,7 +32,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                         var index = Convert.ToUInt64(y.FirstChild.InnerText);
                         value = StringDictionary[index];
                     }
-                    else if (y.Attributes["t"].Value == "inlineStr")
+                    else if (y.Attributes["t"]?.Value == "inlineStr")
                     {
                         value = y.FirstChild.FirstChild.InnerText;
                     }
