@@ -91,7 +91,7 @@ namespace CodeComb.Data.Excel.Infrastructure
                         if (flag)
                             element2.SetAttribute("t", "s");
                         var element3 = xd.CreateElement("v", xd.DocumentElement.NamespaceURI);
-                        element3.InnerText = innerText;
+                        element3.InnerText = innerText ?? "";
                         element2.AppendChild(element3);
                         element.AppendChild(element2);
                         col++;
