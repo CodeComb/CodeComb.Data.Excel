@@ -115,9 +115,9 @@ namespace CodeComb.Data.Excel.Infrastructure
             {
                 if (dic.Count == 0)
                 {
-                    dic.Add(1, item);
-                    dic2.Add(item, 1);
-                    return 1;
+                    dic.Add(0, item);
+                    dic2.Add(item, 0);
+                    return 0;
                 }
                 else
                 {
@@ -135,8 +135,8 @@ namespace CodeComb.Data.Excel.Infrastructure
             {
                 if (dic.Count == 0)
                 {
-                    dic.Add(1, item);
-                    dic2.Add(item, 1);
+                    dic.Add(0, item);
+                    dic2.Add(item, 0);
                 }
                 else
                 {
