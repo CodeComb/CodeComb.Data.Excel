@@ -101,40 +101,49 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public void RemoveAt(int index)
         {
-            var str = dic[Convert.ToUInt64(index)];
-            dic.Remove(Convert.ToUInt64(index));
-            dic2.Remove(str);
+            lock(this)
+            {
+                var str = dic[Convert.ToUInt64(index)];
+                dic.Remove(Convert.ToUInt64(index));
+                dic2.Remove(str);
+            }
         }
 
         public ulong _Add(string item)
         {
-            if (dic.Count == 0)
+            lock (this)
             {
-                dic.Add(1, item);
-                dic2.Add(item, 1);
-                return 1;
-            }
-            else
-            {
-                var last = dic.Last().Key;
-                dic.Add(last + 1, item);
-                dic2.Add(item, last + 1);
-                return last + 1;
+                if (dic.Count == 0)
+                {
+                    dic.Add(1, item);
+                    dic2.Add(item, 1);
+                    return 1;
+                }
+                else
+                {
+                    var last = dic.Last().Key;
+                    dic.Add(last + 1, item);
+                    dic2.Add(item, last + 1);
+                    return last + 1;
+                }
             }
         }
 
         public void Add(string item)
         {
-            if (dic.Count == 0)
+            lock(this)
             {
-                dic.Add(1, item);
-                dic2.Add(item, 1);
-            }
-            else
-            {
-                var last = dic.Max(x => x.Key);
-                dic.Add(last + 1, item);
-                dic2.Add(item, last + 1);
+                if (dic.Count == 0)
+                {
+                    dic.Add(1, item);
+                    dic2.Add(item, 1);
+                }
+                else
+                {
+                    var last = dic.Max(x => x.Key);
+                    dic.Add(last + 1, item);
+                    dic2.Add(item, last + 1);
+                }
             }
         }
 
@@ -156,14 +165,17 @@ namespace CodeComb.Data.Excel.Infrastructure
 
         public bool Remove(string item)
         {
-            var keys = dic.Where(x => x.Value == item)
-                .Select(x => x.Key)
-                .ToList();
-            if (keys.Count == 0)
-                return false;
-            foreach (var x in keys)
-                dic.Remove(x);
-            return true;
+            lock(this)
+            {
+                var keys = dic.Where(x => x.Value == item)
+                    .Select(x => x.Key)
+                    .ToList();
+                if (keys.Count == 0)
+                    return false;
+                foreach (var x in keys)
+                    dic.Remove(x);
+                return true;
+            }
         }
 
         public IEnumerator<string> GetEnumerator()
