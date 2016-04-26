@@ -316,7 +316,7 @@ namespace CodeComb.Data.Excel
                 var relationships = xd.GetElementsByTagName("Relationships")
                     .Cast<XmlNode>()
                     .First();
-                identifier += relationships.ChildNodes.Count.ToString();
+                identifier += (relationships.ChildNodes.Count + 1).ToString();
                 var element = xd.CreateElement("Relationship", xd.DocumentElement.NamespaceURI);
                 element.SetAttribute("Target", $"worksheets/sheet{Id}.xml");
                 element.SetAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
