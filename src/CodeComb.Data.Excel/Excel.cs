@@ -255,7 +255,6 @@ namespace CodeComb.Data.Excel
         private ulong createSheet(string name)
         {
             var Id = WorkBook.Count > 0 ? WorkBook.Max(x => x.Id) + 1 : 1;
-            string identifier;
             // 向缓存中添加该Id
             WorkBook.Add(new WorkBook
             {
@@ -304,6 +303,30 @@ namespace CodeComb.Data.Excel
                 xd.Save(stream);
             }
 
+            string identifier = "rId";
+            
+            // 向xl/rels中添加
+            var e5 = ZipArchive.GetEntry("xl/_rels/workbook.xml.rels");
+            using (var stream = e5.Open())
+            using (var sr = new StreamReader(stream))
+            {
+                var result = sr.ReadToEnd();
+                var xd = new XmlDocument();
+                xd.LoadXml(result);
+                var relationships = xd.GetElementsByTagName("Relationships")
+                    .Cast<XmlNode>()
+                    .First();
+                identifier += relationships.ChildNodes.Count.ToString();
+                var element = xd.CreateElement("Relationship", xd.DocumentElement.NamespaceURI);
+                element.SetAttribute("Target", $"worksheets/sheet{Id}.xml");
+                element.SetAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
+                element.SetAttribute("Id", identifier);
+                relationships.AppendChild(element);
+                stream.Position = 0;
+                stream.SetLength(0);
+                xd.Save(stream);
+            }
+
             // 向workbook.xml添加sheetX.xml
             var e3 = ZipArchive.GetEntry("xl/workbook.xml");
             using (var stream = e3.Open())
@@ -317,7 +340,6 @@ namespace CodeComb.Data.Excel
                 var element = xd.CreateElement("sheet", xd.DocumentElement.NamespaceURI);
                 tmp.AppendChild(element);
                 var attr = xd.CreateAttribute("r", "id", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-                identifier = Guid.NewGuid().ToString().Substring(0, 8);
                 attr.Value = identifier;
                 element.Attributes.Append(attr);
                 element.SetAttribute("sheetId", Id.ToString());
@@ -349,27 +371,6 @@ namespace CodeComb.Data.Excel
                     .Cast<XmlNode>()
                     .Single();
                 tmp2.InnerText = (Convert.ToInt32(tmp2.InnerText) + 1).ToString();
-                stream.Position = 0;
-                stream.SetLength(0);
-                xd.Save(stream);
-            }
-
-            // 向xl/rels中添加
-            var e5 = ZipArchive.GetEntry("xl/_rels/workbook.xml.rels");
-            using (var stream = e5.Open())
-            using (var sr = new StreamReader(stream))
-            {
-                var result = sr.ReadToEnd();
-                var xd = new XmlDocument();
-                xd.LoadXml(result);
-                var relationships = xd.GetElementsByTagName("Relationships")
-                    .Cast<XmlNode>()
-                    .First();
-                var element = xd.CreateElement("Relationship", xd.DocumentElement.NamespaceURI);
-                element.SetAttribute("Target", $"worksheets/sheet{Id}.xml");
-                element.SetAttribute("Type", "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet");
-                element.SetAttribute("Id", identifier);
-                relationships.AppendChild(element);
                 stream.Position = 0;
                 stream.SetLength(0);
                 xd.Save(stream);
