@@ -1,42 +1,38 @@
-﻿{
+{
   "title": "CodeComb.Data.Excel",
-  "version": "2.0.0-rc1-final-6",
+  "version": "2.0.0-rc1-final-7",
   "description": "The excel provider for vNext",
   "copyright": "Harbin Code Comb Technology Co.,Ltd",
   "authors": [ "AmamiyaYuuko" ],
-  "tags": [ "vNext", "ASP.Net", "MVC", "Excel", "DNXCore" ],
-  "iconUrl": "http://www.1234.sh/images/logo.png",
-  "projectUrl": "https://github.com/CodeComb/CodeComb.Data.Excel",
-  "licenseUrl": "",
+
+  "packOptions": {
+    "tags": [ "vNext", "ASP.Net", "MVC", "Excel", "DNXCore" ],
+    "iconUrl": "http://www.1234.sh/images/logo.png",
+    "projectUrl": "https://github.com/CodeComb/CodeComb.Data.Excel",
+    "licenseUrl": ""
+  },
+
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
+    },
+    "System.Data.Common": "4.1.0",
+    "System.IO.Compression.ZipFile": "4.0.1",
+    "System.IO.FileSystem": "4.0.1",
+    "System.Xml.XmlDocument": "4.0.1",
+    "System.Xml.XPath": "4.0.1",
+    "System.Xml.XPath.XDocument": "4.0.1",
+    "System.Xml.XPath.XmlDocument": "4.0.1"
+  },
 
   "frameworks": {
-    "net451": {
-      "frameworkAssemblies": {
-        "System.Data": "",
-        "System.IO.Compression": "",
-        "System.Xml": "",
-        "System.Xml.Linq": ""
-      }
-    },
-    "dotnet5.4": {
-      "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516",
-        "System.Data.Common": "4.0.1-beta-23516",
-        "System.IO.Compression.ZipFile": "4.0.1-beta-23516",
-        "System.IO.FileSystem": "4.0.1-beta-23516",
-        "System.Xml.XPath.XDocument": "4.0.1-beta-23516",
-        "System.Xml.XmlDocument": "4.0.1-beta-23516",
-        "System.Xml.XDocument": "4.0.11-beta-23516",
-        "System.Xml.ReaderWriter": "4.0.11-beta-23516",
-        "System.Xml.XPath.XmlDocument": "4.0.1-beta-23516",
-        "System.Xml.XPath": "4.0.1-beta-23516",
-        "System.Xml.XmlSerializer": "4.0.11-beta-23516",
-        "System.Resources.ResourceManager": "4.0.1-beta-23516"
-      }
+    "netcoreapp1.0": {
+      "imports": [
+        "dotnet5.6",
+        "dnxcore50",
+        "portable-net45+win8"
+      ]
     }
   }
 }

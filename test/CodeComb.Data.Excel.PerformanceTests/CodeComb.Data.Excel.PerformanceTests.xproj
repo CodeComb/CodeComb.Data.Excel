@@ -9,9 +9,8 @@
     <ProjectGuid>a6a0687a-d936-402c-bfd0-fac12bd5e6fc</ProjectGuid>
     <RootNamespace>CodeComb.Data.Excel.PerformanceTests</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">\\Mac\Home\项目\CodeComb.Data.Excel\artifacts\obj\$(MSBuildProjectName)</BaseIntermediateOutputPath>
-    <OutputPath Condition="'$(OutputPath)'=='' ">\\Mac\Home\项目\CodeComb.Data.Excel\artifacts\bin\$(MSBuildProjectName)\</OutputPath>
+    <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
   </PropertyGroup>
-
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
